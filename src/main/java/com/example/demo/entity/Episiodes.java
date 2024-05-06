@@ -14,7 +14,6 @@ public class Episiodes {
     double duration;
     String VideoUrl;
     int order;
-    int movieId;
     LocalDate createAt;
     LocalDate updateAt;
 }

@@ -10,7 +10,7 @@ public class Favorites {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto tăng id
     Integer id;
-    int userId;
-    int movieId;
+//    int userId;
+//    int movieId;
     LocalDate createAt;
 }

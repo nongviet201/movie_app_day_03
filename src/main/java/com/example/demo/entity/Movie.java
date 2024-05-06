@@ -16,14 +16,14 @@ public class Movie {
     @Column(nullable = false)
     String description;
     String poster;
-    int release_year;
+    int releaseYear;
     double rating;
     @Enumerated(EnumType.STRING)
     MovieType type;
     @Column(nullable = false)
     boolean status;
     String trailer;
-    int countryId;
+//    int countryId;
     LocalDate createdAt;
     LocalDate datetime;
 }

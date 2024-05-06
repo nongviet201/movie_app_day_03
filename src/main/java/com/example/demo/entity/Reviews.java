@@ -12,8 +12,8 @@ public class Reviews {
     Integer id;
     String content;
     double rating;
-    int userId;
-    int movieId;
+//    int userId;
+//    int movieId;
     LocalDate createAt;
     LocalDate updateAt;
 }

@@ -10,9 +10,9 @@ public class Histories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto tăng id
     Integer id;
-    int userId;
-    int movieId;
-    int episiodeId;
+//    int userId;
+//    int movieId;
+//    int episiodeId;
     double duration;
     LocalDate createAt;
 }

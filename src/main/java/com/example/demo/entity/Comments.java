@@ -12,8 +12,6 @@ public class Comments {
     Integer id;
     @Column(nullable = false)
     String content;
-    int userId;
-    int blogId;
     LocalDate createdAt;
     LocalDate datetime;
 }
