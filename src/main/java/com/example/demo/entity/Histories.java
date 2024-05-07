@@ -15,4 +15,5 @@ public class Histories {
 //    int episiodeId;
     double duration;
     LocalDate createAt;
+    LocalDate updateAt;
 }

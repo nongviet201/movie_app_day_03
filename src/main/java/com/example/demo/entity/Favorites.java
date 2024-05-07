@@ -13,4 +13,5 @@ public class Favorites {
 //    int userId;
 //    int movieId;
     LocalDate createAt;
+    LocalDate updateAt;
 }

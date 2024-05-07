@@ -22,5 +22,5 @@ public class Blog {
     @Column(nullable = false)
     String userId;
     LocalDate createdAt;
-    LocalDate datetime;
+    LocalDate updateAt;
 }

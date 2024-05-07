@@ -1,29 +1,35 @@
 package com.example.demo.entity;
 
+import com.example.demo.entity.model.enums.MovieType;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@ToString
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table (name = "movies")
-public class Movie {
+public class Movies {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto tăng id
     Integer id;
     @Column(nullable = false)
     String name;
     String slug;
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     String description;
     String poster;
     int releaseYear;
     double rating;
     @Enumerated(EnumType.STRING)
     MovieType type;
-    @Column(nullable = false)
     boolean status;
     String trailer;
-//    int countryId;
     LocalDate createdAt;
-    LocalDate datetime;
+    LocalDate updateAt;
 }

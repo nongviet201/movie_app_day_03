@@ -13,7 +13,7 @@ public class Episiodes {
     String name;
     double duration;
     String VideoUrl;
-    int order;
+    Integer orders;
     LocalDate createAt;
     LocalDate updateAt;
 }

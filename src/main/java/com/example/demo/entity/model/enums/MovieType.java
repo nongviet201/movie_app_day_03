@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.entity.model.enums;
 
 public enum MovieType {
     PHIM_LE,

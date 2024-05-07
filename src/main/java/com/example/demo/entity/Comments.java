@@ -13,5 +13,5 @@ public class Comments {
     @Column(nullable = false)
     String content;
     LocalDate createdAt;
-    LocalDate datetime;
+    LocalDate updateAt;
 }

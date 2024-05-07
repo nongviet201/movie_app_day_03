@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.entity.model.enums.UserRole;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
