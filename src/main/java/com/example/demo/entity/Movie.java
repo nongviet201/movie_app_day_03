@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 @Entity
 @Table (name = "movies")
-public class Movies {
+public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto tăng id
     Integer id;

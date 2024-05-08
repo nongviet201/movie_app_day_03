@@ -1,0 +1,43 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+img {
+    max-width: 100%;
+}
+
+ul {
+    list-style: none;
+}
+
+.movie-poster {
+    height: 250px;
+}
+
+.movie-poster img {
+    object-fit: cover;
+    transition: all 0.3s;
+}
+
+.movie-poster:hover img {
+    transform: scale(1.1);
+}
+
+.img_title {
+    width: 450px;
+    height: 400px;
+}
+
+.avt {
+    width: 60px;
+    height: 60px;
+    background: #000;
+    margin-left: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}

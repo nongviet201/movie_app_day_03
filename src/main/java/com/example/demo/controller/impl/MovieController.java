@@ -13,9 +13,21 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping("/phim-bo")
-    public String findByType(Model model){
+    public String phimBo(Model model){
         model.addAttribute("movies", movieService.findByType(MovieType.PHIM_BO));
         return "phim-bo";
+    }
+
+    @GetMapping("/phim-le")
+    public String phimLe(Model model){
+        model.addAttribute("movies", movieService.findByType(MovieType.PHIM_LE));
+        return "phim-le";
+    }
+
+    @GetMapping("/phim-chieu-rap")
+    public String phimChieuRap(Model model){
+        model.addAttribute("movies", movieService.findByType(MovieType.PHIM_CHIEU_RAP));
+        return "phim-chieu-rap";
     }
 
 }
