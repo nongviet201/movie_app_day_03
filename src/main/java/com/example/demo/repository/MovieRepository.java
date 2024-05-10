@@ -19,20 +19,24 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> findByTypeOrderByRatingDesc(MovieType type);
 
 
+
     List<Movie> findByType(MovieType type, Sort sort);
+
+    List<Movie> findByStatusOrderByRatingDesc(boolean status);
 
 
     List<Movie> findByTypeAndStatusOrderByCreatedAtDesc(MovieType type, boolean status);
 
+    Movie findByIdAndSlug(int id, String slug);
 
-    Movie findFirstByTypeOrderByRatingDesc(MovieType type);
-
-    long countByStatus(Boolean status);
     // kiem tra ton tai
     boolean existsByName(String name);
 
     //phân trang
     Page<Movie> findByStatus(Boolean status, Pageable pageable);
 
+    List<Movie> findByTypeAndStatus(MovieType movieType ,Boolean status, Sort sort);
+
+    Page<Movie> findByTypeAndStatus(MovieType movieType, Boolean status, Pageable pageable);
 
 }

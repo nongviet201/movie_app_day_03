@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"><head>
+<html lang="en"><head>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -41,7 +41,7 @@
             <h3>Danh sách phim bộ</h3>
         </div>
         <div class="row">
-            <div class="col-2 mt-2" th:each="movie: ${movies}">
+            <div class="col-2 mt-2" th:each="movie: ${pageData.getContent()}">
                 <a href="thong-tin-phim.html">
                     <div class="movie-item">
                         <div class="movie-poster rounded overflow-hidden">
@@ -55,14 +55,14 @@
         <div class="d-flex justify-content-center mt-4">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
+                    <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{/phim-bo (page=${currentPage - 1})}">Previous</a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                    <li class="page-item" th:each="number: ${#numbers.sequence(1, pageData.getTotalPages())}" th:classappend="${currentPage == number ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/phim-bo (page=${number})}" th:text="${number}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == pageData.getTotalPages() ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{/phim-bo (page=${currentPage +1})}">Next</a>
                     </li>
                 </ul>
             </nav>

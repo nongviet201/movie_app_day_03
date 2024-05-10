@@ -5,6 +5,8 @@ import com.example.demo.entity.model.enums.MovieType;
 import com.example.demo.repository.MovieRepository;
 import com.example.demo.servies.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,4 +18,21 @@ public class MovieServiceImpl implements MovieService {
     public List<Movie> findByType(MovieType movieType) {
         return movieRepository.findByTypeAndStatusOrderByCreatedAtDesc(movieType, true);
     }
+
+    @Override
+    public Page<Movie> findByType(MovieType movieType, boolean status , int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        return movieRepository.findByTypeAndStatus(movieType ,status, pageRequest);
+    }
+
+    @Override
+    public List<Movie> findByStatusOrderByRatingDesc(boolean status) {
+        return movieRepository.findByStatusOrderByRatingDesc(status);
+    }
+
+    @Override
+    public Movie findByIdAndSlug(int id, String slug) {
+        return movieRepository.findByIdAndSlug(id, slug);
+    }
+
 }

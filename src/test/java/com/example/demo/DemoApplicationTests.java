@@ -1,7 +1,9 @@
 package com.example.demo;
 
+import com.example.demo.entity.Blog;
 import com.example.demo.entity.Movie;
 import com.example.demo.entity.model.enums.MovieType;
+import com.example.demo.repository.BlogRepository;
 import com.example.demo.repository.MovieRepository;
 import com.github.javafaker.Faker;
 import com.github.slugify.Slugify;
@@ -19,7 +21,9 @@ import java.util.Random;
 @SpringBootTest
 class DemoApplicationTests {
     @Autowired
-private MovieRepository movieRepository;
+    private MovieRepository movieRepository;
+    @Autowired
+    private BlogRepository blogRepository;
 
     @Test
     void contextLoads() {
@@ -33,7 +37,7 @@ private MovieRepository movieRepository;
                     .name(name)
                     .slug(slugify.slugify(name))
                     .description(faker.lorem().paragraph())
-                    .poster("https://placehold.co/600x400/000000/FFF" + String.valueOf(name.charAt(0)).toUpperCase())
+                    .poster("https://placehold.co/600x400?text=" + String.valueOf(name.charAt(0)).toUpperCase())
                     .releaseYear(faker.number().numberBetween(2021, 2024))
                     .rating(faker.number().randomDouble(1,1,10))
                     .type(MovieType.values()[random.nextInt(MovieType.values().length)])
@@ -70,5 +74,27 @@ private MovieRepository movieRepository;
         System.out.println("Total pages: " + page.getTotalPages());
         System.out.println("Total elements: " + page.getTotalElements());
         System.out.println("Content of page: " + page.getContent());
+    }
+
+    @Test
+    void save_blog() {
+        Random random = new Random();
+        Faker faker = new Faker();
+        Slugify slugify = Slugify.builder().build();
+
+        for (int i = 0; i < 20; i++) {
+            String name = faker.book().title();
+            Blog blog = Blog.builder()
+                    .title(name)
+                    .slug(slugify.slugify(name))
+                    .description(faker.lorem().paragraph())
+                    .content(faker.lorem().paragraph(100))
+                    .thumbnail("https://placehold.co/600x400?text=" + String.valueOf(name.charAt(0)).toUpperCase())
+                    .status(faker.random().nextBoolean())
+                    .createdAt(LocalDate.now())
+                    .updateAt(LocalDate.now())
+                    .build();
+            blogRepository.save(blog);
+        }
     }
 }

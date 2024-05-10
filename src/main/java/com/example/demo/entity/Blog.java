@@ -1,9 +1,16 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 
+@ToString
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "blogs")
 public class Blog {
@@ -14,13 +21,12 @@ public class Blog {
     String title;
     @Column(nullable = false)
     String slug;
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     String description;
+    @Column(columnDefinition = "TEXT")
     String content;
     String thumbnail;
-    String status;
-    @Column(nullable = false)
-    String userId;
+    boolean status;
     LocalDate createdAt;
     LocalDate updateAt;
 }
