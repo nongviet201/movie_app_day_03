@@ -19,6 +19,8 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
     List<Movie> findByTypeOrderByRatingDesc(MovieType type);
 
 
+    // tim phim de xuất cung the loai
+    List<Movie> findByTypeAndStatusAndOrderByCreatedAtDesc(MovieType type, boolean status);
 
     List<Movie> findByType(MovieType type, Sort sort);
 

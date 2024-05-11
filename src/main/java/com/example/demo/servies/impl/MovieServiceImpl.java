@@ -35,4 +35,9 @@ public class MovieServiceImpl implements MovieService {
         return movieRepository.findByIdAndSlug(id, slug);
     }
 
+    @Override
+    public List<Movie> findByTypeAndStatusAndOrderByCreateAtDesc(MovieType movieType, boolean status) {
+        return movieRepository.findByTypeAndStatusAndOrderByCreatedAtDesc(movieType, status);
+    }
+
 }

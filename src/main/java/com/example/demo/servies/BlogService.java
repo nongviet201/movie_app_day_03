@@ -10,4 +10,5 @@ public interface BlogService {
     Page<Blog> findByStatus(boolean status, int page, int size);
     Blog findByIdAndSlugAndStatus(int id, String slug, boolean status);
     List<Blog> blogNew(boolean status);
+
 }

@@ -14,4 +14,6 @@ public interface MovieService {
     List<Movie> findByStatusOrderByRatingDesc(boolean status);
 
     Movie findByIdAndSlug(int id, String slug);
+
+    List<Movie> findByTypeAndStatusAndOrderByCreateAtDesc(MovieType movieType, boolean status);
 }
