@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Blog;
-import com.example.demo.entity.Movie;
+import com.example.demo.entity.*;
 import com.example.demo.entity.model.enums.MovieType;
-import com.example.demo.servies.BlogService;
-import com.example.demo.servies.MovieService;
+import com.example.demo.servies.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -19,6 +17,8 @@ import java.util.List;
 public class WebController {
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/tin-tuc")
     public String danhSachBlog(Model model,
@@ -33,6 +33,8 @@ public class WebController {
     @GetMapping("/tin-tuc/{id}/{slug}")
     public String blogById(Model model, @PathVariable int id, @PathVariable String slug) {
         Blog blog = blogService.findByIdAndSlugAndStatus(id, slug, true);
+        List<Comment> comments = commentService.findByBlogId(id);
+        model.addAttribute("comments", comments);
         model.addAttribute("blog", blog);
         return "blog-info";
     }
@@ -86,10 +88,22 @@ public class WebController {
         return "phim-chieu-rap";
     }
 
+
+    @Autowired
+    private EpisodeService episodeService;
+    @Autowired
+    private ReviewService reviewService;
+
     @GetMapping("/phim/{id}/{slug}")
     public String thongTinPhim(Model model, @PathVariable int id, @PathVariable String slug) {
         Movie movie = movieService.findByIdAndSlug(id, slug);
+        List<Episode> episode = episodeService.findById(id);
+        List<Reviews> reviews = reviewService.findByMovieIdOrderByDateDesc(id);
+        List<Movie> phimDeXuat = movieService.findByTypeAndStatusOrderByRatingAsc(movie.getType()).stream().limit(8).toList();
+        model.addAttribute("phimDeXuat", phimDeXuat);
         model.addAttribute("movie", movie);
+        model.addAttribute("episode", episode);
+        model.addAttribute("reviews", reviews);
         return "thong-tin-phim";
     }
 

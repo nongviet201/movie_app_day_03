@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.entity.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,19 +12,23 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "history")
+public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto tăng id
     Integer id;
-    @Column(nullable = false)
-    String username;
-    @Column(nullable = false)
-    String password;
-    String avatar;
-    String email;
-    @Enumerated(EnumType.STRING)
-    UserRole role;
+    double duration;
     LocalDate createAt;
     LocalDate updateAt;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
+
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    Movie movie;
+
+    @ManyToOne
+    @JoinColumn(name = "episode_id")
+    Episode episode;
 }

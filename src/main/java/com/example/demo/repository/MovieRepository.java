@@ -20,14 +20,14 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
 
     // tim phim de xuất cung the loai
-    List<Movie> findByTypeAndStatusAndOrderByCreatedAtDesc(MovieType type, boolean status);
+    List<Movie> findByTypeAndStatusOrderByRatingAsc(MovieType type, boolean status);
 
     List<Movie> findByType(MovieType type, Sort sort);
 
     List<Movie> findByStatusOrderByRatingDesc(boolean status);
 
 
-    List<Movie> findByTypeAndStatusOrderByCreatedAtDesc(MovieType type, boolean status);
+
 
     Movie findByIdAndSlug(int id, String slug);
 

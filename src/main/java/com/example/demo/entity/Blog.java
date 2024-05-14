@@ -29,4 +29,8 @@ public class Blog {
     boolean status;
     LocalDate createdAt;
     LocalDate updateAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
 }

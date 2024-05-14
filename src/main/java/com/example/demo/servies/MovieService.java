@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface MovieService {
-    List<Movie> findByType(MovieType movieType);
+    List<Movie> findByTypeAndStatusOrderByRatingAsc(MovieType movieType);
 
     Page<Movie> findByType(MovieType movieType, boolean status, int page, int size);
 
@@ -15,5 +15,5 @@ public interface MovieService {
 
     Movie findByIdAndSlug(int id, String slug);
 
-    List<Movie> findByTypeAndStatusAndOrderByCreateAtDesc(MovieType movieType, boolean status);
+//    List<Movie> findByTypeAndStatusAndOrderByCreateAtDesc(MovieType movieType, boolean status);
 }

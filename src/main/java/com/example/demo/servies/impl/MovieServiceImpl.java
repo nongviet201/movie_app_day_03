@@ -15,8 +15,8 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     MovieRepository movieRepository;
     @Override
-    public List<Movie> findByType(MovieType movieType) {
-        return movieRepository.findByTypeAndStatusOrderByCreatedAtDesc(movieType, true);
+    public List<Movie> findByTypeAndStatusOrderByRatingAsc(MovieType movieType) {
+        return movieRepository.findByTypeAndStatusOrderByRatingAsc(movieType, true);
     }
 
     @Override
@@ -35,9 +35,9 @@ public class MovieServiceImpl implements MovieService {
         return movieRepository.findByIdAndSlug(id, slug);
     }
 
-    @Override
-    public List<Movie> findByTypeAndStatusAndOrderByCreateAtDesc(MovieType movieType, boolean status) {
-        return movieRepository.findByTypeAndStatusAndOrderByCreatedAtDesc(movieType, status);
-    }
+//    @Override
+//    public List<Movie> findByTypeAndStatusAndOrderByCreateAtDesc(MovieType movieType, boolean status) {
+//        return movieRepository.findByTypeAndStatusAndOrderByCreatedAtDesc(movieType, status);
+//    }
 
 }

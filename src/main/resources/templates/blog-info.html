@@ -45,33 +45,14 @@
     <div class="container">
         <h5>BÌNH LUẬN</h5>
         <div class=" mb-3 w-100">
-            <div class="d-flex justify-content-start align-items-center mt-3 ms-3">
+            <div class="d-flex justify-content-start align-items-center mt-3 ms-3" th:each="comment : ${comments}">
                 <div>
-                    <div class="avt rounded-circle"></div>
+                    <div class="rounded-circle">
+                        <img  th:src="${comment.getUser().getAvatar()}" th:alt="${comment.getUser().getUsername()}">
+                    </div>
                 </div>
                 <div>
-                    <p class="ms-4">phim hay, rất tuyệt vời</p>
-                </div>
-
-            </div>
-        </div>
-        <div class=" mb-3 w-100">
-            <div class="d-flex justify-content-start align-items-center mt-3 ms-3">
-                <div>
-                    <div class="avt rounded-circle"></div>
-                </div>
-                <div>
-                    <p class="ms-4">phim hay, rất tuyệt vời</p>
-                </div>
-            </div>
-        </div>
-        <div class=" mb-3 w-100">
-            <div class="d-flex justify-content-start align-items-center mt-3 ms-3">
-                <div>
-                    <div class="avt rounded-circle"></div>
-                </div>
-                <div>
-                    <p class="ms-4">phim hay, rất tuyệt vời</p>
+                    <p class="ms-4" th:text="${comment.getContent()}">phim hay, rất tuyệt vời</p>
                 </div>
             </div>
         </div>
