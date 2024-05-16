@@ -1,7 +1,6 @@
 package com.example.demo.servies.impl;
 
 import com.example.demo.entity.Blog;
-import com.example.demo.entity.model.enums.MovieType;
 import com.example.demo.repository.BlogRepository;
 import com.example.demo.servies.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;

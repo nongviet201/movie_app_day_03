@@ -47,3 +47,20 @@ a {
     width: 100%;
     background: #000;
 }
+
+
+/*Star CSS*/
+.rating {
+    font-size: 24px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.star {
+    display: inline-block;
+}
+
+.star:hover,
+.star.active {
+    color: #EDBB0E;
+}

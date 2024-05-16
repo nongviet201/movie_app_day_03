@@ -1,7 +1,7 @@
 package com.example.demo.servies;
 
 import com.example.demo.entity.Movie;
-import com.example.demo.entity.model.enums.MovieType;
+import com.example.demo.model.enums.MovieType;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

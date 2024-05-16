@@ -1,8 +1,8 @@
 package com.example.demo;
 
 import com.example.demo.entity.*;
-import com.example.demo.entity.model.enums.MovieType;
-import com.example.demo.entity.model.enums.UserRole;
+import com.example.demo.model.enums.MovieType;
+import com.example.demo.model.enums.UserRole;
 import com.example.demo.repository.*;
 import com.github.javafaker.Faker;
 import com.github.slugify.Slugify;

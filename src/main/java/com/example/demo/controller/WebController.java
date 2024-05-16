@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.*;
-import com.example.demo.entity.model.enums.MovieType;
+import com.example.demo.model.enums.MovieType;
 import com.example.demo.servies.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
