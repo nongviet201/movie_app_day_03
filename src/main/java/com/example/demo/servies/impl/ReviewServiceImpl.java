@@ -8,6 +8,7 @@ import com.example.demo.repository.MovieRepository;
 import com.example.demo.repository.ReviewReponsitory;
 import com.example.demo.repository.UserReponsitory;
 import com.example.demo.servies.ReviewService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,9 @@ public class ReviewServiceImpl implements ReviewService {
     MovieRepository movieRepository;
     @Autowired
     UserReponsitory userReponsitory;
+    @Autowired
+    HttpSession session;
+
 
     @Override
     public List<Reviews> findByMovieIdOrderByDateDesc(Integer movieId) {
@@ -33,9 +37,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Reviews createReview(UpsertReviewRequest request) {
         //TODO: fix userId. ve sau userId chinh la user dang login
-        Integer userId = 4;
-        User user = userReponsitory.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = (User) session.getAttribute("currentUser");
 
         //kiem tra movie co ton tai khong
         Movie movie = movieRepository.findById(request.getMovieId())
@@ -62,16 +64,14 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new RuntimeException("Review not found"));
 
         //TODO: fix userId. ve sau userId chinh la user dang login
-        Integer userId = 4;
-        User user = userReponsitory.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = (User) session.getAttribute("currentUser");;
 
         //kiem tra movie co ton tai khong
         Movie movie = movieRepository.findById(request.getMovieId())
                 .orElseThrow(() -> new RuntimeException("Movie not found"));
 
         //Kiem tra review co thuoc user hay khong
-        if (!reviews.getUser().getId().equals(userId)) {
+        if (!reviews.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("User not authorized");
         }
 
@@ -95,12 +95,10 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new RuntimeException("Review not found"));
 
         //TODO: fix userId. ve sau userId chinh la user dang login
-        Integer userId = 4;
-        User user = userReponsitory.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = (User) session.getAttribute("currentUser");
 
         //Kiem tra review co thuoc user hay khong
-        if (!reviews.getUser().getId().equals(userId)) {
+        if (!reviews.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("User not authorized");
         }
 
@@ -113,12 +111,10 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new RuntimeException("Review not found"));
 
         //TODO: fix userId. ve sau userId chinh la user dang login
-        Integer userId = 4;
-        User user = userReponsitory.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = (User) session.getAttribute("currentUser");
 
         //Kiem tra review co thuoc user hay khong
-        if (!review.getUser().getId().equals(userId)) {
+        if (!review.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("User not authorized");
         }
 

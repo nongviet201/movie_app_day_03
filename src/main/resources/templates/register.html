@@ -1,17 +1,18 @@
 <!doctype html>
-<html lang="en"><head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:id="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MOVIE</title>
+    <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
-
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 <body>
 <header class="bg-dark">
@@ -31,62 +32,37 @@
                     <a class="nav-link text-white" href="danh-sach-phim.html">Phim Chiếu Rạp</a>
                 </div>
             </div>
-            <div>
-                <div th:if="${session.currentUser == null}">
-                    <a class="text-white" href="/login">Đăng nhập</a>
-                </div>
-                <button th:if="${session.currentUser != null}" th:text="${session.currentUser.username}" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                </button>
-                <ul class="dropdown-menu dropdown-menu-dark me-0" style="right: 10%; left: 80%">
-                    <li th:if="${session.currentUser != null and session.currentUser.role.toString() == 'ADMIN'}"><a class="dropdown-item" href="#">Trang Quản Trị</a></li>
-                    <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
-                    <li><a class="dropdown-item" href="#">Lịch sử xem phim</a></li>
-                    <li><a class="dropdown-item" href="#">Phim yêu thích</a></li>
-                    <li><a class="dropdown-item" href="#">Log out</a></li>
-                </ul>
-            </div>
         </div>
     </nav>
 </header>
-
 <section class="py-4">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <h3>Danh sách phim bộ</h3>
-        </div>
-        <div class="row">
-            <div class="col-2 mt-2" th:each="movie: ${pageData.getContent()}">
-                <a href="thong-tin-phim.html">
-                    <div class="movie-item">
-                        <div class="movie-poster rounded overflow-hidden">
-                            <img class="w-100 h-100" th:src="${movie.getPoster()}" th:alt="${movie.getName()}">
-                        </div>
-                        <p class="mt-2" th:text="${movie.getName()}"></p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="d-flex justify-content-center mt-4">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{/phim-bo (page=${currentPage - 1})}">Previous</a>
-                    </li>
-                    <li class="page-item" th:each="number: ${#numbers.sequence(1, pageData.getTotalPages())}" th:classappend="${currentPage == number ? 'active' : ''}">
-                        <a class="page-link" th:href="@{/phim-bo (page=${number})}" th:text="${number}"></a>
-                    </li>
-                    <li class="page-item" th:classappend="${currentPage == pageData.getTotalPages() ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{/phim-bo (page=${currentPage +1})}">Next</a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="d-flex justify-content-center align-items-center flex-column">
+            <h3 class="mb-3">Đăng Ký</h3>
+            <form id="form-register" class="p-4 bg-body-tertiary">
+                <div class="mb-3">
+                    <label for="userName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="userName"/>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="email"/>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password"/>
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="confirmPassword"/>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary" id="btn-register">Đăng ký</button>
+                </div>
+            </form>
         </div>
     </div>
 </section>
-
-
-
 <footer class="bg-dark py-4">
     <div class="container">
         <div class="row">
@@ -127,13 +103,59 @@
                     </ul>
                 </div>
             </div>
-
         </div>
     </div>
 </footer>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    // Xử lý login
+    const formRegisterEl = document.getElementById('form-register');
+    const emailEl = document.getElementById('email');
+    const passwordEl = document.getElementById('password');
+    const userNameEl = document.getElementById('userName');
+    const confirmPassword = document.getElementById('confirmPassword');
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    formRegisterEl.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (emailEl.value.trim() === "") {
+            alert("Email không được để trống");
+            return;
+        }
+
+        if (passwordEl.value.trim() === "") {
+            alert("Password không được để trống");
+            return;
+        }
+
+        if (passwordEl.value.trim() !== confirmPassword.value.trim()) {
+            alert("Password khong chính xác");
+            return;
+        }
+
+        const data = {
+            email: emailEl.value,
+            password: passwordEl.value,
+            name: userNameEl.value,
+            confirmPassword: confirmPassword.value
+        };
+
+        console.log(data);
+
+        try {
+            const response = await axios.post('/api/auth/register', data);
+            if (response.status === 200) {
+                alert("Đăng ký thành công");
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000); // sau 1s chuyển hướng về trang chủ
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Tai khoan hoac mat khau khong dung");
+        }
+    })
+</script>
+</script>
 </body>
 </html>

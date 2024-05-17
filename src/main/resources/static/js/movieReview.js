@@ -144,6 +144,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+const editReviewBtn = document.getElementById("btn-edit-review");
+const createReviewBtn = document.getElementById("btn-create-review");
 
 //nút edit
 
@@ -155,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Xử lý sự kiện click cho nút "Chỉnh sửa"
     editButtons.forEach(button => {
         button.addEventListener("click", async (e) => {
+            createReviewBtn.classList.add("hide");
             reviewId = button.getAttribute("data-review-id"); // Lưu ID của review cần chỉnh sửa
 
             try {

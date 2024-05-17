@@ -31,6 +31,21 @@
                     <a class="nav-link text-white" href="danh-sach-phim.html">Phim Chiếu Rạp</a>
                 </div>
             </div>
+            <div>
+                <div th:if="${session.currentUser == null}">
+                    <a class="text-white" href="/login">Đăng nhập</a>
+                </div>
+                <button th:if="${session.currentUser != null}" th:text="${session.currentUser.username}" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Dropdown
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark me-0" style="right: 10%; left: 80%">
+                    <li th:if="${session.currentUser != null and session.currentUser.role.toString() == 'ADMIN'}"><a class="dropdown-item" href="#">Trang Quản Trị</a></li>
+                    <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
+                    <li><a class="dropdown-item" href="#">Lịch sử xem phim</a></li>
+                    <li><a class="dropdown-item" href="#">Phim yêu thích</a></li>
+                    <li><a class="dropdown-item" href="#">Log out</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 </header>

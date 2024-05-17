@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ class DemoApplicationTests {
     private ReviewReponsitory reviewReponsitory;
     @Autowired
     private UserReponsitory userReponsitory;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Test
     void saveGenre() {
@@ -328,6 +331,16 @@ class DemoApplicationTests {
         List<User> users = userReponsitory.findByRole(UserRole.USER);
 
     }
+
+    @Test
+    void updatePasswordUser() {
+     List<User> users = userReponsitory.findAll();
+    for (User user : users) {
+        user.setPassword(passwordEncoder.encode("123"));
+        userReponsitory.save(user);
+    }
+    }
 }
+
 
  

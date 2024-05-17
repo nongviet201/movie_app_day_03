@@ -107,5 +107,15 @@ public class WebController {
         return "thong-tin-phim";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "register";
+    }
+
 }
 
