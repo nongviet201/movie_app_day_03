@@ -1,6 +1,7 @@
 const stars = document.querySelectorAll(".star");
 const ratingValue = document.getElementById("rating-value");
 
+
 let currentRating = 0;
 
 stars.forEach((star) => {
@@ -62,11 +63,10 @@ const renderReview = reviews => {
                         <p class="rating-time mb-0 ms-2">${formatDate(review.createAt())}</p>
                     </div>
                     <div class="rating-star">
-                        <p class="mb-0 fw-bold">
-                            <span class="rating-icon"><i class="fa fa-star"></i></span>
-                            <span>${review.rating}/10 Tuyệt vời</span>
-                        </p>
+                       
                     </div>
+                    
+                   ${currentUser.id === review.user.id ? ' <p class="mb-0 fw-bold">\n                            <span class="rating-icon"><i class="fa fa-star"></i></span>\n                            <span>${review.rating}/10 Tuyệt vời</span>\n                        </p>' : ""}
                     <p class="rating-content mt-1 mb-0 text-muted">${review.content}</p>
                 </div>
             </div>
@@ -93,11 +93,14 @@ modalReviewEl.addEventListener('hidden.bs.modal', event => {
     resetStars();
 })
 
+toastr.success("đánh giá thành công")
+
 formReviewEl.addEventListener("submit", async (e) => {
     e.preventDefault();
     // TODO: Validate các thông tin (sử dụng thư jQuery Validation)
     if (currentRating === 0) {
         alert("Vui lòng chọn số sao");
+
         return;
     }
 
@@ -117,6 +120,7 @@ formReviewEl.addEventListener("submit", async (e) => {
         let res = await axios.post("/api/reviews", data);
         reviews.unshift(res.data);
         renderReview(reviews);
+        toastr.success("đánh giá thành công")
 
         // Dong modal
         myModalReviewEl.hide();
@@ -202,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Gọi API
             try {
                 let res = await axios.put("/api/reviews/" + reviewId, data);
-                // reset
+
             } catch (e) {
                 console.log(e)
             }
