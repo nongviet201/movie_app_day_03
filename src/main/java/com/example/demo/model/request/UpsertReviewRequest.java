@@ -3,6 +3,8 @@ package com.example.demo.model.request;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,13 +16,11 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpsertReviewRequest {
-    @NotBlank(message = "Email không để trống")
-    @Email(message = "Email không đúng định dạng")
+    @NotEmpty(message = "Nội dung không được để trống")
     String content;
-    @NotBlank(message = "Email không để trống")
-    @Email(message = "Email không đúng định dạng")
+    @NotNull(message = "Không được để trống Rating")
     Integer rating;
-    @NotBlank(message = "Email không để trống")
+    @NotNull(message = "id movie không được để trống")
     Integer movieId;
 
 }
