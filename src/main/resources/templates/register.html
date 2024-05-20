@@ -15,26 +15,7 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 <body>
-<header class="bg-dark">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <img src="https://motchilltv.ac/_ipx/s_150x35/logo.png" alt="logo">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link text-white" href="index.html">Trang Chủ</a>
-                    <a class="nav-link text-white" href="danh-sach-phim.html">Phim Bộ</a>
-                    <a class="nav-link text-white" href="danh-sach-phim.html">Phim Lẻ</a>
-                    <a class="nav-link text-white" href="danh-sach-phim.html">Phim Chiếu Rạp</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
+<th:block th:replace="~{/fragments/header :: header}"></th:block>
 <section class="py-4">
     <div class="container">
         <div class="d-flex justify-content-center align-items-center flex-column">
@@ -63,99 +44,9 @@
         </div>
     </div>
 </section>
-<footer class="bg-dark py-4">
-    <div class="container">
-        <div class="row">
-            <div class="col-3">
-                <img src="https://motchilltv.ac/_ipx/s_150x35/logo.png" alt="logo">
-                <p class="text-white mt-3">Motchill - Trang web xem phim trực tuyến miễn phí chất lượng cao với giao diện trực quan, tốc độ tải trang nhanh, cùng kho phim với hơn 10.000+ phim mới, phim hay, luôn cập nhật phim nhanh, hứa hẹn sẽ đem lại phút giây thư giãn cho bạn.</p>
-            </div>
-            <div class="col-3">
-                <div class="text-white">
-                    <h5>DANH MỤC</h5>
-                    <ul class="ps-0">
-                        <li class="mt-2 mb-3">Phim mới</li>
-                        <li class="mb-3">Phim chiếu rạp</li>
-                        <li class="mb-3">Phim bộ</li>
-                        <li class="mb-3">Phim lẻ</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="text-white">
-                    <h5>DANH MỤC</h5>
-                    <ul class="ps-0">
-                        <li class="mt-2 mb-3">Phim mới</li>
-                        <li class="mb-3">Phim chiếu rạp</li>
-                        <li class="mb-3">Phim bộ</li>
-                        <li class="mb-3">Phim lẻ</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="text-white">
-                    <h5>DANH MỤC</h5>
-                    <ul class="ps-0">
-                        <li class="mt-2 mb-3">Phim mới</li>
-                        <li class="mb-3">Phim chiếu rạp</li>
-                        <li class="mb-3">Phim bộ</li>
-                        <li class="mb-3">Phim lẻ</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+<th:block th:replace="~{/fragments/footer :: footer}"></th:block>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-    // Xử lý login
-    const formRegisterEl = document.getElementById('form-register');
-    const emailEl = document.getElementById('email');
-    const passwordEl = document.getElementById('password');
-    const userNameEl = document.getElementById('userName');
-    const confirmPassword = document.getElementById('confirmPassword');
-
-    formRegisterEl.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        if (emailEl.value.trim() === "") {
-            alert("Email không được để trống");
-            return;
-        }
-
-        if (passwordEl.value.trim() === "") {
-            alert("Password không được để trống");
-            return;
-        }
-
-        if (passwordEl.value.trim() !== confirmPassword.value.trim()) {
-            alert("Password khong chính xác");
-            return;
-        }
-
-        const data = {
-            email: emailEl.value,
-            password: passwordEl.value,
-            name: userNameEl.value,
-            confirmPassword: confirmPassword.value
-        };
-
-        console.log(data);
-
-        try {
-            const response = await axios.post('/api/auth/register', data);
-            if (response.status === 200) {
-                alert("Đăng ký thành công");
-                setTimeout(() => {
-                    window.location.href = '/';
-                }, 1000); // sau 1s chuyển hướng về trang chủ
-            }
-        } catch (error) {
-            console.error(error);
-            alert("Tai khoan hoac mat khau khong dung");
-        }
-    })
-</script>
+<script src="/js/auth/register.js"></script>
 </script>
 </body>
 </html>

@@ -3,6 +3,8 @@ package com.example.demo.servies.impl;
 import com.example.demo.entity.Movie;
 import com.example.demo.entity.Reviews;
 import com.example.demo.entity.User;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.request.UpsertReviewRequest;
 import com.example.demo.repository.MovieRepository;
 import com.example.demo.repository.ReviewReponsitory;
@@ -41,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         //kiem tra movie co ton tai khong
         Movie movie = movieRepository.findById(request.getMovieId())
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
 
         //Tao reviews
         Reviews review = Reviews.builder()
@@ -61,23 +63,23 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Reviews updateReview(Integer id, UpsertReviewRequest request) {
         Reviews reviews = reviewReponsitory.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
         //TODO: fix userId. ve sau userId chinh la user dang login
         User user = (User) session.getAttribute("currentUser");;
 
         //kiem tra movie co ton tai khong
         Movie movie = movieRepository.findById(request.getMovieId())
-                .orElseThrow(() -> new RuntimeException("Movie not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
 
         //Kiem tra review co thuoc user hay khong
         if (!reviews.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("User not authorized");
+            throw new BadRequestException("User not authorized");
         }
 
         //Kiem tra review nay co thuoc Movie hay khong
         if (!reviews.getMovie().getId().equals(movie.getId())) {
-            throw new RuntimeException("Movie not authorized");
+            throw new BadRequestException("Movie not authorized");
         }
 
         //Cap nhat review
@@ -92,14 +94,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReview(Integer id) {
         Reviews reviews = reviewReponsitory.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
         //TODO: fix userId. ve sau userId chinh la user dang login
         User user = (User) session.getAttribute("currentUser");
 
         //Kiem tra review co thuoc user hay khong
         if (!reviews.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("User not authorized");
+            throw new BadRequestException("User not authorized");
         }
 
         reviewReponsitory.delete(reviews);
@@ -108,14 +110,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Reviews getReview(Integer id) {
         Reviews review = reviewReponsitory.findById(id)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
         //TODO: fix userId. ve sau userId chinh la user dang login
         User user = (User) session.getAttribute("currentUser");
 
         //Kiem tra review co thuoc user hay khong
         if (!review.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("User not authorized");
+            throw new BadRequestException("User not authorized");
         }
 
         return review;

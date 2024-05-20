@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<header class="bg-dark">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <img src="https://motchilltv.ac/_ipx/s_150x35/logo.png" alt="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link text-white" href="index.html">Trang Chủ</a>
+                    <a class="nav-link text-white" href="danh-sach-phim.html">Phim Bộ</a>
+                    <a class="nav-link text-white" href="danh-sach-phim.html">Phim Lẻ</a>
+                    <a class="nav-link text-white" href="danh-sach-phim.html">Phim Chiếu Rạp</a>
+                </div>
+            </div>
+            <div>
+                <div th:if="${session.currentUser == null}">
+                    <a class="text-white" href="/login">Đăng nhập</a>
+                </div>
+                <button th:if="${session.currentUser != null}" th:text="${session.currentUser.username}" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Dropdown
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark me-0" style="right: 10%; left: 80%">
+                    <li th:if="${session.currentUser != null and session.currentUser.role.toString() == 'ADMIN'}"><a class="dropdown-item" href="#">Trang Quản Trị</a></li>
+                    <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
+                    <li><a class="dropdown-item" href="#">Lịch sử xem phim</a></li>
+                    <li><a class="dropdown-item" href="#">Phim yêu thích</a></li>
+                    <li><a id="logout" class="dropdown-item" href="#">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+</body>
+</html>

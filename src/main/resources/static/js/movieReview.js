@@ -1,7 +1,6 @@
 const stars = document.querySelectorAll(".star");
 const ratingValue = document.getElementById("rating-value");
 
-
 let currentRating = 0;
 
 stars.forEach((star) => {
@@ -41,71 +40,90 @@ function highlightStars(rating) {
 // render review
 const formatDate = dateStr => {
     const date = new Date(dateStr);
-    const day = `0${date.getDate()}`.slice(-2); // 01 -> 01, 015 -> 15
+    const day = `0${date.getDate()}`.slice(-2);
     const month = `0${date.getMonth() + 1}`.slice(-2);
-    const year = date.getFullYear();
+    const year = date.getFullYear()
     return `${day}/${month}/${year}`;
 }
-const reviewListEl = document.querySelector(".review-list");
+
+const reviewListEl = document.querySelector(".review-list")
+
 const renderReview = reviews => {
     let html = "";
     reviews.forEach(review => {
         html += `
-            <div class="rating-item d-flex align-items-center mb-3 pb-3">
-                <div class="rating-avatar">
-                    <img src="${review.user.avatar}" alt="${review.user.name}">
-                </div>
-                <div class="rating-info ms-3">
-                    <div class="d-flex align-items-center">
-                        <p class="rating-name mb-0">
-                            <strong>${review.user.name}</strong>
-                        </p>
-                        <p class="rating-time mb-0 ms-2">${formatDate(review.createAt())}</p>
+                ${review.user != null ? `
+                 <div class="text-black d-flex flex-column mb-3 p-3 user-review rounded-2 ">
+                 <div class="d-flex">
+                    <img src="${review.user.avatar}" alt="${review.user.username}">
+                    <div class="d-flex flex-column ms-4">
+                            <div class="d-flex">
+                                <strong class="m-0 pe-2 review-name">${review.user.username}</strong>
+                                <p class="m-0 review-time">${formatDate(review.createAt)}</p>
+                            </div>
+                            <div>
+                                <p class="m-0 review-text">${review.content}</p>
+                            </div>
+                            ${currentUser.id === review.user.id ? `
+                            <div class="mt-2">
+                                <button onclick="deleteReview(${review.id}" type="button"
+                                        class="btn btn-outline-secondary btn-sm btn-delete"
+                                        style="--bs-btn-padding-y: .2rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .7rem;">
+                                    Xóa
+                                </button>
+                                <button data-review-id="${review.id}" type="button"
+                                        class="btn btn-outline-secondary btn-sm btn-edit"
+                                        style="--bs-btn-padding-y: .2rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .7rem;">
+                                    Sửa
+                                </button>
+                            </div>
+                            ` : ''}
+                        </div>
                     </div>
-                    <div class="rating-star">
-                       
-                    </div>
-                    
-                   ${currentUser.id === review.user.id ? ' <p class="mb-0 fw-bold">\n                            <span class="rating-icon"><i class="fa fa-star"></i></span>\n                            <span>${review.rating}/10 Tuyệt vời</span>\n                        </p>' : ""}
-                    <p class="rating-content mt-1 mb-0 text-muted">${review.content}</p>
-                </div>
-            </div>
-        `
+                </div> 
+                 ` : ''}
+                `
     })
-
     reviewListEl.innerHTML = html;
-}
+    editButtonFn();
+};
 
-// Tạo review
 const formReviewEl = document.getElementById("form-review");
-const reviewContentEl = document.getElementById("review-content");
+const reviewContentEl = document.getElementById("review-content")
 const modalReviewEl = document.getElementById("modal-review");
-const myModalReviewEl = new bootstrap.Modal(modalReviewEl, {
-    keyboard: false
-})
 
+const btnOpenModal = document.querySelector(".btn-open-modal")
 
+btnOpenModal.addEventListener("click", () => {
+    myModalReviewEl.show();
+    btnCreateReviewEl.textContent = `Tạo đánh giá`
+});
+
+// đóng modal
 modalReviewEl.addEventListener('hidden.bs.modal', event => {
     console.log("Su kien dong modal")
     currentRating = 0;
     reviewContentEl.value = "";
     ratingValue.textContent = "";
     resetStars();
+    idReviewEdit = null;
 })
 
-toastr.success("đánh giá thành công")
+const btnCreate = document.querySelector(".btn-create")
 
+// submit form
 formReviewEl.addEventListener("submit", async (e) => {
     e.preventDefault();
-    // TODO: Validate các thông tin (sử dụng thư jQuery Validation)
-    if (currentRating === 0) {
-        alert("Vui lòng chọn số sao");
 
+    // TODO: validate các thông tin (sử dụng thư viện jquery validation
+
+    if (currentRating === 0) {
+        toastr.error("vui lòng chọn số sao");
         return;
     }
 
     if (reviewContentEl.value.trim() === "") {
-        alert("Nội dung đánh giá không được để trống");
+        toastr.error("nội dung đánh giá không được để trống");
         return;
     }
 
@@ -115,100 +133,117 @@ formReviewEl.addEventListener("submit", async (e) => {
         movieId: movie.id
     }
 
-    // Gọi API
-    try {
-        let res = await axios.post("/api/reviews", data);
-        reviews.unshift(res.data);
-        renderReview(reviews);
-        toastr.success("đánh giá thành công")
-
-        // Dong modal
-        myModalReviewEl.hide();
-
-        // reset
-    } catch (e) {
-        console.log(e)
+    if (idReviewEdit) {
+        await editReview(data)
+    } else {
+        await createReview(data)
     }
 })
 
-//nút xóa
-document.addEventListener("DOMContentLoaded", function () {
-    const deleteButtons = document.querySelectorAll(".review-delete");
+// tạo review
+const createReview = async (data) => {
+    try {
+        let res = await axios.post("/api/reviews", data)
+        reviews.unshift(res.data);
+        renderReview(reviews)
+        // đóng modal
+        myModalReviewEl.hide();
+        toastr.success("Đánh giá thành công")
+    } catch (e) {
+        console.log(e);
+        toastr.error("có lỗi sảy ra vui lòng thử lại sau");
+    }
+}
 
-    // Xử lý sự kiện click cho nút "Xóa"
-    deleteButtons.forEach(button => {
-        button.addEventListener("click", async (e) => {
-            const reviewId = button.getAttribute("data-review-id");
+
+// mở modal chỉnh sửa và hiển thị dữ liệu của review đó
+const modalReviewTitleEl = document.querySelector(".modal-review-title")
+const btnCreateReviewEl = document.getElementById("btn-create-review")
+
+let idReviewEdit = null;
+
+const editButtonFn = () => {
+    const btnEditReviewEl = document.querySelectorAll(".btn-edit");
+    btnEditReviewEl.forEach(button => {
+        button.addEventListener("click", async () => {
+            console.log("sự kiện sửa review")
+            const reviewIdNumber = parseInt(button.dataset.reviewId, 10);
             try {
-                const res = await axios.delete("/api/reviews/" + reviewId);
-                renderReview(reviews);
-            } catch (error) {
-                console.log(error);}
-        });
-    });
-});
-
-const editReviewBtn = document.getElementById("btn-edit-review");
-const createReviewBtn = document.getElementById("btn-create-review");
-
-//nút edit
-
-document.addEventListener("DOMContentLoaded", function () {
-    const editButtons = document.querySelectorAll(".review-edit");
-    let reviewId; // Để lưu trữ ID của review cần chỉnh sửa
-
-
-    // Xử lý sự kiện click cho nút "Chỉnh sửa"
-    editButtons.forEach(button => {
-        button.addEventListener("click", async (e) => {
-            createReviewBtn.classList.add("hide");
-            reviewId = button.getAttribute("data-review-id"); // Lưu ID của review cần chỉnh sửa
-
-            try {
-                // Gửi yêu cầu lấy dữ liệu của review từ backend
-                const response = await axios.get("/api/reviews/" + reviewId);
-                const reviewData = response.data; // Dữ liệu của review
-
-                // Hiển thị dữ liệu của review lên form
-                currentRating = parseInt(reviewData.rating);
-                highlightStars(currentRating);
-                reviewContentEl.value = reviewData.content;
+                let reponse = await axios.get("/api/reviews/"+reviewIdNumber)
+                let review = reponse.data;
+                reviewContentEl.value = review.content;
+                currentRating = review.rating;
                 ratingValue.textContent = `Bạn đã đánh giá ${currentRating} sao.`;
-            } catch (error) {
-                console.log(error);
-                // Xử lý lỗi nếu có
-            }
-        });
-    });
-
-
-    document.getElementById("btn-edit-review").addEventListener("click", async (e) => {
-            e.preventDefault();
-            // TODO: Validate các thông tin (sử dụng thư jQuery Validation)
-            if (currentRating === 0) {
-                alert("Vui lòng chọn số sao");
-                return;
-            }
-
-            if (reviewContentEl.value.trim() === "") {
-                alert("Nội dung đánh giá không được để trống");
-                return;
-            }
-
-            const data = {
-                content: reviewContentEl.value,
-                rating: currentRating,
-                movieId: movie.id
-            }
-
-            console.log(data)
-
-            // Gọi API
-            try {
-                let res = await axios.put("/api/reviews/" + reviewId, data);
-
+                highlightStars(currentRating)
+                idReviewEdit = reviewIdNumber
             } catch (e) {
                 console.log(e)
+                toastr.error("bạn không phải là tác giả");
             }
         })
     });
+}
+
+editButtonFn();
+
+
+// sửa review
+const editReview = async (data) => {
+    try {
+        const res = await axios.put(`/api/reviews/${idReviewEdit}`, data)
+        const editedReviewIndex = reviews.findIndex(review => review.id === idReviewEdit);
+        if (editedReviewIndex !== -1) {
+            reviews[editedReviewIndex] = res.data;
+            renderReview(reviews);
+        }
+        myModalReviewEl.hide()
+        toastr.success("đã sửa thành công")
+    } catch (error) {
+        console.log(error)
+        toastr.error("bạn không phải là tác giả");
+    }
+}
+
+// xóa review
+const deleteReview = async (id) => {
+    const confirm = window.confirm("Bạn có chắc muốn xóa không")
+    if (!confirm)
+        return;
+
+    try {
+        const res = await axios.delete(`/api/reviews/${id}`)
+        reviews = reviews.filter(review => review.id !== id);
+        toastr.success("đã xóa thành công")
+        renderReview(reviews)
+    } catch (e) {
+        console.log(e)
+        toastr.error("bạn không phải là tác giả");
+    }
+}
+
+// thông báo
+$('#form-review').validate({
+    rules: {
+        content: {
+            required: true,
+        }
+    },
+    messages: {
+        content: {
+            required: "không được để trống nội dung",
+        }
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('invalid-feedback');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    }
+});
+
+

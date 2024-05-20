@@ -1,6 +1,7 @@
 package com.example.demo.servies.impl;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.enums.UserRole;
 import com.example.demo.model.request.LoginRequest;
 import com.example.demo.model.request.RegisterRequest;
@@ -29,11 +30,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void login(LoginRequest request) {
         User users = userReponsitory.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Email incorrect"));
+                .orElseThrow(() -> new BadRequestException("Email incorrect"));
 
         // kiểm tra password
         if (!bCryptPasswordEncoder.matches(request.getPassword(), users.getPassword())) {
-            throw new RuntimeException("password incorrect");
+            throw new BadRequestException("password incorrect");
         }
 
         // lưu thông tin user vào session dể sử dụng ở các request tiếp theo
@@ -43,11 +44,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void register(RegisterRequest request) {
         if (userReponsitory.findByUsername(request.getName()).isPresent()) {
-            throw new RuntimeException("Username already in use");
+            throw new BadRequestException("Username already in use");
         }
 
         if (userReponsitory.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already in use");
+            throw new BadRequestException("Email already in use");
         }
 
         User savedUser = User.builder()
@@ -63,5 +64,12 @@ public class AuthServiceImpl implements AuthService {
         userReponsitory.save(savedUser);
         session.setAttribute("currentUser", savedUser);
     }
+
+    @Override
+    public void logout() {
+        session.setAttribute("currentUser", null);
+    }
+
+
 }
 
