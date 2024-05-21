@@ -36,7 +36,6 @@ public class AuthServiceImpl implements AuthService {
         if (!bCryptPasswordEncoder.matches(request.getPassword(), users.getPassword())) {
             throw new BadRequestException("password incorrect");
         }
-
         // lưu thông tin user vào session dể sử dụng ở các request tiếp theo
         session.setAttribute("currentUser", users);
     }

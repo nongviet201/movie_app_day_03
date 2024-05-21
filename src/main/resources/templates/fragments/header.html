@@ -11,7 +11,7 @@
 <header class="bg-dark">
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="/">
                 <img src="https://motchilltv.ac/_ipx/s_150x35/logo.png" alt="logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link text-white" href="index.html">Trang Chủ</a>
+                    <a class="nav-link text-white" href="/">Trang Chủ</a>
                     <a class="nav-link text-white" href="danh-sach-phim.html">Phim Bộ</a>
                     <a class="nav-link text-white" href="danh-sach-phim.html">Phim Lẻ</a>
                     <a class="nav-link text-white" href="danh-sach-phim.html">Phim Chiếu Rạp</a>
@@ -34,9 +34,9 @@
                 </button>
                 <ul class="dropdown-menu dropdown-menu-dark me-0" style="right: 10%; left: 80%">
                     <li th:if="${session.currentUser != null and session.currentUser.role.toString() == 'ADMIN'}"><a class="dropdown-item" href="#">Trang Quản Trị</a></li>
-                    <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
+                    <li><a class="dropdown-item" th:if="${session.currentUser != null}" th:href="@{/user-info/{id}(id=${session.currentUser.id})}">Sửa thông tin cá nhân</a></li>
                     <li><a class="dropdown-item" href="#">Lịch sử xem phim</a></li>
-                    <li><a class="dropdown-item" href="#">Phim yêu thích</a></li>
+                    <li><a id="favorite" class="dropdown-item" href="#">Phim yêu thích</a></li>
                     <li><a id="logout" class="dropdown-item" href="#">Log out</a></li>
                 </ul>
             </div>

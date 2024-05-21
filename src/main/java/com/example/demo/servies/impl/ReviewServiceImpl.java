@@ -66,7 +66,7 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
         //TODO: fix userId. ve sau userId chinh la user dang login
-        User user = (User) session.getAttribute("currentUser");;
+        User user = (User) session.getAttribute("currentUser");
 
         //kiem tra movie co ton tai khong
         Movie movie = movieRepository.findById(request.getMovieId())
@@ -96,7 +96,6 @@ public class ReviewServiceImpl implements ReviewService {
         Reviews reviews = reviewReponsitory.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
-        //TODO: fix userId. ve sau userId chinh la user dang login
         User user = (User) session.getAttribute("currentUser");
 
         //Kiem tra review co thuoc user hay khong

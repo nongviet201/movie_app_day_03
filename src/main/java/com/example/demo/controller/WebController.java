@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.*;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.enums.MovieType;
 import com.example.demo.servies.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class WebController {
@@ -19,6 +22,10 @@ public class WebController {
     private BlogService blogService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private HttpSession session;
 
     @GetMapping("/tin-tuc")
     public String danhSachBlog(Model model,
@@ -93,6 +100,8 @@ public class WebController {
     private EpisodeService episodeService;
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private FavoriteService favoriteService;
 
     @GetMapping("/phim/{id}/{slug}")
     public String thongTinPhim(Model model, @PathVariable int id, @PathVariable String slug) {
@@ -107,6 +116,8 @@ public class WebController {
         return "thong-tin-phim";
     }
 
+
+
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -119,5 +130,43 @@ public class WebController {
         return "register";
     }
 
+    @GetMapping("/user-info/{id}")
+    public String userInfo(Model model, @PathVariable String id) {
+        int userId;
+        try {
+            userId = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("ID không hợp lệ");
+        }
+        Optional<User> user = userService.findUserById(userId);
+        model.addAttribute("user", user);
+        return "thong-tin-nguoi-dung";
+    }
+
+    @GetMapping("/user-info/{id}/favorites")
+    public String favorites(Model model, @PathVariable String id) {
+        int userId;
+        try {
+            userId = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("ID không hợp lệ");
+        }
+        List<Favorite> favorites = favoriteService.findByUserIdOrderByCreateAtDesc(userId);
+        model.addAttribute("favorites", favorites);
+        return "danh-sach-yeu-thich";
+    }
+
+    @GetMapping("/user-info/{id}/password")
+    public String userPass(Model model, @PathVariable String id) {
+        int userId;
+        try {
+            userId = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("ID không hợp lệ");
+        }
+        Optional<User> user = userService.findUserById(userId);
+        model.addAttribute("user", user);
+        return "updae-password";
+    }
 }
 

@@ -1,5 +1,4 @@
-
-// LOGOUT
+//LOGOUT
 
 const logout = document.getElementById("logout");
 logout.addEventListener("click", async () => {
@@ -12,4 +11,13 @@ logout.addEventListener("click", async () => {
     } catch (error) {
         toastr.error("Bạn chưa đăng nhập");
     }
+})
+
+
+//Favorite
+
+const favoriteBtn = document.getElementById("favorite");
+favoriteBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.href = '/user-info/' +currentUser.id+ '/favorites';
 })
