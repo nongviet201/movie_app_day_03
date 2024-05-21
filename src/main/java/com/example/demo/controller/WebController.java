@@ -166,7 +166,7 @@ public class WebController {
         }
         Optional<User> user = userService.findUserById(userId);
         model.addAttribute("user", user);
-        return "updae-password";
+        return "update-password";
     }
 }
 

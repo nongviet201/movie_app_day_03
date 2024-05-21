@@ -43,15 +43,15 @@ public class UserApi {
     }
 
 //     Xóa khỏi danh sách yêu thích
-    @DeleteMapping("/favorite/del")
-    public ResponseEntity<String> delFavorite(@Valid @RequestBody AddFavoriteRequest request) {
-        favoriteService.deleteFavorite(request);
+    @DeleteMapping("/favorite/del/{id}")
+    public ResponseEntity<String> delFavorite(@Valid @PathVariable Integer id) {
+        favoriteService.deleteFavorite(id);
         return ResponseEntity.ok("delete successfully");
     }
 
-    @GetMapping("/favorite/get")
-    public ResponseEntity<?> getFavorite(@Valid @RequestBody AddFavoriteRequest request) {
-        Favorite favorite = favoriteService.getFavorite(request);
+    @GetMapping("/favorite/get/{userId}/{movieId}")
+    public ResponseEntity<?> getFavorite(@Valid @PathVariable Integer userId, @Valid @PathVariable Integer movieId) {
+        Favorite favorite = favoriteService.getFavorite(userId, movieId);
         return ResponseEntity.ok(favorite);
     }
 }

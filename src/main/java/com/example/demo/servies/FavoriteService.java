@@ -10,9 +10,9 @@ public interface FavoriteService {
 
     void createFavorite(AddFavoriteRequest request);
 
-    Favorite getFavorite(AddFavoriteRequest request);
+    Favorite getFavorite(Integer userId, Integer favoriteId);
 
-    void deleteFavorite(AddFavoriteRequest request);
+    void deleteFavorite(int id);
 
     Favorite findByUserIdAndMovieId(Integer userId, Integer movieId);
 }

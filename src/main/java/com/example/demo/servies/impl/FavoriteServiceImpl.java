@@ -10,12 +10,12 @@ import com.example.demo.repository.FavoriteReponsitory;
 import com.example.demo.repository.MovieRepository;
 import com.example.demo.repository.UserReponsitory;
 import com.example.demo.servies.FavoriteService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
@@ -33,7 +33,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public void createFavorite(AddFavoriteRequest request) {
         // kiểm tra xem phim đã có trong danh sách chưa
-        Favorite existingFavorite = favoriteReponsitory.findByUserIdAndMovieId(request.getUserId(), request.getMovieId());
+        Favorite existingFavorite = favoriteReponsitory.findByUser_IdAndMovie_Id(request.getUserId(), request.getMovieId());
         if (existingFavorite != null) {
             throw new BadRequestException("Phim đã tồn tại trong danh sách yêu thích");
         }
@@ -55,13 +55,13 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public Favorite getFavorite(AddFavoriteRequest request) {
-        return favoriteReponsitory.findByUserIdAndMovieId(request.getUserId(), request.getMovieId());
+    public Favorite getFavorite(Integer userId, Integer movieId) {
+        return favoriteReponsitory.findByUser_IdAndMovie_Id(userId, movieId);
     }
 
     @Override
-    public void deleteFavorite(AddFavoriteRequest request) {
-        Favorite favorite = favoriteReponsitory.findByUserIdAndMovieId(request.getUserId(), request.getMovieId());
+    public void deleteFavorite(int id) {
+        Favorite favorite = favoriteReponsitory.findById(id);
         favoriteReponsitory.delete(favorite);
     }
 

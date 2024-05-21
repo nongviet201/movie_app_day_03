@@ -32,12 +32,8 @@ public class UserServiceImpl implements UserService {
         User user = userReponsitory.findById(userRequest.getId())
                 .orElseThrow(() -> new BadRequestException("ID Lỗi"));
 
-
-
         user.setUsername(userRequest.getUsername());
-        user.setEmail(userRequest.getEmail());
-
-
+        
         userReponsitory.save(user);
 //      lưu thông tin user vào session dể sử dụng ở các request tiếp theo
         session.setAttribute("currentUser", user);
