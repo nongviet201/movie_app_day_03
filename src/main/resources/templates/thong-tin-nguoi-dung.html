@@ -36,7 +36,7 @@
                 </div>
                 <div class="form-group mb-3">
                     <label for="email" class="form-label" >Email</label>
-                    <input type="email" class="form-control" id="email" name="email" readonly th:value="${user.get().email}"/>
+                    <input type="email" class="form-control" id="email" name="email" disabled th:value="${user.get().email}"/>
                 </div>
                 <div class="form-group mb-3">
                     <button type="submit" class="btn btn-primary" id="btn-update-user">Cập Nhật</button>
