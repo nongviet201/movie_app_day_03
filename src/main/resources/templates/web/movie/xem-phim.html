@@ -99,8 +99,8 @@
                                 <div>
                                     <p class="m-0 review-text" th:text="${review.getContent()}">Phim hài quá</p>
                                 </div>
-                                <div class="mt-2"
-                                     th:if="${session.currentUser != null and session.currentUser.id == review.getUser().getId()}">
+                                <div class="mt-2" sec:authorize="isAuthenticated()"
+                                     th:if="${#authentication.principal.userF.id == review.getUser().getId()}">
                                     <button th:onclick="'javascript:deleteReview(' + ${review.getId()} + ')'" type="button"
                                             class="btn btn-outline-secondary btn-sm btn-delete"
                                             style="--bs-btn-padding-y: .2rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .7rem;">
@@ -204,7 +204,7 @@
     <script th:inline="javascript">
         const movie = [[${movie}]];
         let reviews = [[${reviews}]];
-        const currentUser = [[${session.currentUser}]];
+        const currentUser = [[${#authentication.principal.user}]];
         console.log(movie)
         console.log(reviews);
     </script>
