@@ -14,4 +14,6 @@ public interface BlogRepository  extends JpaRepository<Blog, Integer> {
     Blog findByIdAndSlugAndStatus(Integer id, String slug, boolean status);
 
     List<Blog> findByStatusOrderByCreatedAtDesc(boolean status);
+
+    List<Blog> findByUser_IdOrderByCreatedAtDesc(Integer id);
 }

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #content}, ~{:: #js})}"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thong tin phim</title>
+    <th:block id="css">
+    </th:block>
+</head>
+<body>
+<!-- movie info -->
+<th:block id="content">
+    <section>
+        <div class="container">
+            <div class="row mt-5 mb-5">
+                <div class="col-6">
+                    <img class="img_title" th:src="${movie.getPoster()}" th:alt="${movie.getName()}">
+                </div>
+                <div class="col-6 ">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3 th:text="${movie.getName()}">Bộ Đôi Báo Thủ</h3>
+                            <p class="mb-1">số lượt xem: 4421</p>
+                            <p class="mb-1" th:text="'Thể loại: ' + ${movie.getType()}">Thể loại: Phim bộ</p>
+                            <p class="mb-1" th:text="'Đánh giá: ' + ${movie.getRating()}"> rate: 5.0</p>
+                            <p class="mb-1" th:text="'Quốc gia: ' + ${movie.getCountry().getName()}"></p>
+                            <p class="mb-1">Đạo diễn:  <th:block th:each="director : ${movie.getDirectors()}" th:text="${director.getName()}"></th:block> </p>
+                            <p class="mb-0">Diễn viên: <th:block th:each="actor : ${movie.getActors()}" th:text="${actor.getName()} + ', '"></th:block></p>
+                        </div>
+                        <div>
+                            <th:block th:if="${movie.type.toString() == 'PHIM_BO' && episodes.size() > 0}">
+                                <a class="d-inline-block btn btn-danger px-5 py-2 mt-3 rounded"
+                                   th:href="@{/xem-phim/{id}/{slug} (id=${movie.id}, slug=${movie.slug}, tap=${episodes.get(0).displayOrder})}">
+                                    <span><i class="fa-solid fa-play"></i></span>
+                                    Xem phim</a>
+                            </th:block>
+                            <th:block
+                                    th:if="${(movie.type.toString() == 'PHIM_LE' || movie.type.toString() == 'PHIM_CHIEU_RAP') && episodes.size() > 0}">
+                                <a class="d-inline-block btn btn-danger px-5 py-2 mt-3 rounded"
+                                   th:href="@{/xem-phim/{id}/{slug} (id=${movie.id}, slug=${movie.slug}, tap='full')}">
+                                    <span><i class="fa-solid fa-play"></i></span>
+                                    Xem phim</a>
+                            </th:block>
+                            <button id="favoriteBtn" class="btn btn-danger mt-3">
+                                Follow
+                            </button>
+                            <button id="unFavoriteBtn" class="btn btn-danger mt-3 d-none">
+                                UnFollow
+                            </button>
+                        </div>
+                    </div>
+                    <p class="mt-3" th:text="${movie.getDescription()}">Bộ Đôi Báo Thủ Ransomed 2023 Full HD Vietsub Thuyết Minh kể về Min-Joon, một nhà ngoại giao làm việc cho chính phủ Hàn Quốc, không có gì đặc biệt về quá trình học vấn hoặc lý lịch. Tuy nhiên, anh có niềm đam mê mạnh mẽ là muốn được gửi đi làm việc tại Hoa Kỳ. Để thực hiện ước mơ này, Min-Joon tình nguyện tham gia vào một nhiệm vụ không chính thức để giải cứu một nhà ngoại giao Hàn Quốc mất tích. Điều kiện của anh là sau khi hoàn thành nhiệm vụ, anh sẽ được gửi đi làm việc tại Hoa Kỳ.
+                        Nhiệm vụ không chính thức đưa Min-Joon đến Lebanon, một nơi đang trong cuộc nội chiến đẫm máu. Tại đó, anh gặp Pan-Soo, một tài xế taxi người Hàn Quốc giỏi tiếng Ả Rập và am hiểu về đường phố tại Lebanon. Tuy nhiên, Pan-Soo cũng là một kẻ lừa đảo. Liệu Min-Joon có thể giải cứu nhà ngoại giao mất tích mà không có sự hỗ trợ chính thống nào hay không?</p>
+                </div>
+            </div>
+            <div class="episode bg-dark p-4" th:if="${(movie.type.toString() != 'PHIM_LE' || movie.type.toString() != 'PHIM_CHIEU_RAP') && episodes.size() > 0}">>
+                <h3 class="text-light">Danh sách tập</h3>
+                <div class="d-flex align-items-center mt-2">
+                    <div th:each="episode: ${episodes}">
+                        <a th:href="@{/xem-phim/{id}/{slug} (id=${movie.id}, slug=${movie.slug}, tap='full')}">
+                            <button type="button" class="me-1 btn btn-secondary" th:text="${episode.name}">
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container pb-4 bg-ct">
+            <div class="review px-4 py-3 border border-secondary border-opacity-25 rounded-1">
+                <div class="text-black border-bottom border-secondary border-opacity-25 mb-4">
+                    <p class="fw-bold">
+                        Bình Luận
+                        <span th:if="${#lists.isEmpty(reviews)}">(0)</span>
+                        <span th:if="${not #lists.isEmpty(reviews)}">
+                        (<span th:text="${#lists.size(reviews)}"></span>)
+                    </span>
+                    </p>
+                    <p style="font-size: 14px; " sec:authorize="!isAuthenticated()">Vui lòng <a th:href="@{/login}" class="text-warning-emphasis">
+                        đăng nhập</a> để bình luận
+                    </p>
+                    <button sec:authorize="isAuthenticated()" type="button"
+                            class="btn btn-secondary btn-open-modal mb-3 btn-create" data-bs-toggle="modal"
+                            data-bs-target="#modal-review">
+                        Viết đánh giá
+                    </button>
+                </div>
+                <div class="review-list">
+                    <div class="text-black d-flex flex-column mb-3 p-3 user-review rounded-2 " th:each="review : ${reviews}" th:if="${review.getUser() != null}">
+                        <div class="d-flex" th:if="${review.getUser() != null}">
+                            <img th:src="${review.getUser().getAvatar()}" alt="">
+                            <div class="d-flex flex-column ms-4">
+                                <div class="d-flex">
+                                    <strong class="m-0 pe-2 review-name" th:text="${review.getUser().getUsername()}"> Nguyen</strong>
+                                    <p class="m-0 review-time" th:text="${#temporals.format(review.getCreateAt(), 'dd-MM-yyyy')}">11
+                                        tiếng trước</p>
+                                </div>
+                                <div>
+                                    <p class="m-0 review-text" th:text="${review.getContent()}">Phim hài quá</p>
+                                </div>
+                                <div class="mt-2" sec:authorize="isAuthenticated()"
+                                     th:if="${#authentication.principal.user.id == review.getUser().getId()}">
+                                    <button th:onclick="'javascript:deleteReview(' + ${review.getId()} + ')'" type="button"
+                                            class="btn btn-outline-secondary btn-sm btn-delete"
+                                            style="--bs-btn-padding-y: .2rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .7rem;">
+                                        Xóa
+                                    </button>
+                                    <button th:attr="data-review-id=${review.getId()}"
+                                            type="button"
+                                            class="btn btn-outline-secondary btn-sm btn-edit"
+                                            style="--bs-btn-padding-y: .2rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .7rem;"  data-bs-toggle="modal" data-bs-target="#modal-review">
+                                        Sửa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Modal -->
+    <div class="modal fade" id="modal-review" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Tạo đánh giá</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <div class="rating form-group">
+                       <span class="star" data-rating="1">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                            <span class="star" data-rating="2">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                            <span class="star" data-rating="3">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                            <span class="star" data-rating="4">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                            <span class="star" data-rating="5">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                            <span class="star" data-rating="6">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                            <span class="star" data-rating="7">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                            <span class="star" data-rating="8">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                            <span class="star" data-rating="9">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                            <span class="star" data-rating="10">
+                          <i class="fa-solid fa-star"></i>
+                       </span>
+                        </div>
+                        <div id="rating-value"></div>
+                    </div>
+                    <form id="form-review">
+                        <div class="form-group mb-3">
+                            <label for="review-content" class="form-label">Nội dung đánh giá</label>
+                            <textarea class="form-control" id="review-content" rows="3" name="content"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <button type="submit" class="btn btn-primary" id="btn-create-review">Tạo đánh giá</button>
+                            <button type="submit" class="btn btn-primary" id="btn-edit-review">sửa đánh giá</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Phim de xuat-->
+    <section class="py-4">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3>Phim đề xuất</h3>
+            </div>
+            <div class="row">
+                <div class="col-3 mt-2" th:each="movie : ${phimDeXuat}">
+                    <div class="movie-item">
+                        <div class="movie-poster rounded overflow-hidden">
+                            <img class="w-100 h-100" th:src="${movie.getPoster()}" alt="Bo-doi-bao-thu">
+                        </div>
+                        <p class="mt-2" th:text="${movie.getName()}">Bộ đôi báo thủ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+
+<th:block id="js">
+</th:block>
+<script th:inline="javascript">
+    const movie = [[${movie}]];
+    let reviews = [[${reviews}]];
+    const currentUser = [[${#authentication.principal.user}]];
+    console.log(movie)
+    console.log(reviews);
+</script>
+<script src="/web-asset/js/movieReview.js"></script>
+<script src="/web-asset/js/favorites.js"></script>
+<script src="/web-asset/js/header.js"></script>
+</body>
+</html>

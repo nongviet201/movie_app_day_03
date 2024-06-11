@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #content}, ~{:: #js})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MOVIE</title>
+    <th:block id="css">
+    </th:block>
+</head>
+<body>
+<th:block id="content">
+    <section class="py-4">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3>Phim HOT</h3>
+                <a href="movie/danh-sach-phim.html">Xem thêm</a>
+            </div>
+            <div class="row">
+                <div class="col-3 mt-2" th:each="phimHot : ${listPhimHot}">
+                    <a th:href="@{/phim/{id}/{slug} (id = ${phimHot.getId()}, slug = ${phimHot.getSlug()})}">
+                        <div class="movie-item">
+                            <div class="movie-poster rounded overflow-hidden">
+                                <img class="w-100 h-100" th:src="${phimHot.getPoster()}"
+                                     alt="Bo-doi-bao-thu">
+                            </div>
+                            <p class="mt-2" th:text="${phimHot.getName()}">Bộ đôi báo thủ</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-4">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3>Phim bộ gần đây</h3>
+                <a href="movie/danh-sach-phim.html">Xem thêm</a>
+            </div>
+            <div class="row">
+                <div class="col-2 mt-2" th:each="phimBo : ${listPhimBo}">
+                    <a th:href="@{/phim/{id}/{slug} (id = ${phimBo.getId()}, slug = ${phimBo.getSlug()})}">
+                        <div class="movie-item">
+                            <div class="movie-poster rounded overflow-hidden">
+                                <img class="w-100 h-100" th:src="${phimBo.getPoster()}"  alt="Bo-doi-bao-thu">
+                            </div>
+                            <p class="mt-2" th:text="${phimBo.getName()}">Bộ đôi báo thủ</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-4">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3>Phim lẻ gần đây</h3>
+                <a href="movie/danh-sach-phim.html">Xem thêm</a>
+            </div>
+            <div class="row">
+                <div class="col-2 mt-2" th:each="phimLe : ${listPhimLe}">
+                    <a th:href="@{/phim/{id}/{slug} (id = ${phimLe.id}, slug = ${phimLe.getSlug()})}">
+                        <div class="movie-item">
+                            <div class="movie-poster rounded overflow-hidden">
+                                <img class="w-100 h-100" th:src="${phimLe.getPoster()}"  alt="Bo-doi-bao-thu">
+                            </div>
+                            <p class="mt-2" th:text="${phimLe.getName()}">Bộ đôi báo thủ</p>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-4">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3>Phim chiếu rạp gần đây</h3>
+                <a href="movie/danh-sach-phim.html">Xem thêm</a>
+            </div>
+            <div class="row">
+                <div class="col-2 mt-2" th:each="phimChieuRap : ${listPhimChieuRap}">
+                    <a th:href="@{/phim/{id}/{slug} (id = ${phimChieuRap.id}, slug = ${phimChieuRap.getSlug()})}">
+                        <div class="movie-item">
+                            <div class="movie-poster rounded overflow-hidden">
+                                <img class="w-100 h-100" th:src="${phimChieuRap.getPoster()}"  alt="Bo-doi-bao-thu">
+                            </div>
+                            <p class="mt-2" th:text="${phimChieuRap.getName()}">Bộ đôi báo thủ</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-4">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3>Tin tức</h3>
+                <a th:href="@{/tin-tuc}">Xem thêm</a>
+            </div>
+            <div class="row" >
+                <div class="col-6 mt-2" th:each="blog : ${listBlogHot}">
+                    <div>
+                        <a th:href="@{/tin-tuc/{id}/{slug}(id=${blog.id},slug=${blog.slug})}">
+                            <div class="bg-body-secondary p-4 rounded">
+                                <h5 th:text="${blog.title}">Top 10 Bộ Phim Cổ Trang Hoa Ngữ Sắp Chiếu Năm 2024</h5>
+                                <p th:text="${blog.createdAt}">Jan 23, 2024</p>
+                                <p class="mb-0" th:text="${blog.description}">Phim hoa ngữ năm 2024 với nhiều bom tấn hứa hẹn sẽ gây bão trên màn ảnh Hoa Ngữ vậy cùng điểm 10 bộ phim hoa ngữ sắp ra mắt năm 2024. ...</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+
+<th:block id="js">
+</th:block>
+</body>
+</html>

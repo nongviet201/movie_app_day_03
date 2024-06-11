@@ -16,4 +16,14 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> findByBlogId(Integer blogId) {
         return commentReponsitory.findByBlogId(blogId);
     }
+
+    @Override
+    public List<Comment> getCommentsByBlogId(Integer id) {
+        return commentReponsitory.findByBlogId(id);
+    }
+
+    @Override
+    public void deleteCommentsByBlogId(Integer id) {
+        commentReponsitory.deleteAll(commentReponsitory.findByBlogId(id));
+    }
 }

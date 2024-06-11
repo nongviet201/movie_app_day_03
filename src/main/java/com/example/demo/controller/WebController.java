@@ -34,7 +34,7 @@ public class WebController {
         Page<Blog> pageData = blogService.findByStatus(true, page, pageSize);
         model.addAttribute("pageData", pageData);
         model.addAttribute("currentPage", page);
-        return "danh-sach-blog";
+        return "/web/blog/danh-sach-blog";
     }
 
     @GetMapping("/tin-tuc/{id}/{slug}")
@@ -43,7 +43,7 @@ public class WebController {
         List<Comment> comments = commentService.findByBlogId(id);
         model.addAttribute("comments", comments);
         model.addAttribute("blog", blog);
-        return "blog-info";
+        return "/web/blog/blog-info";
     }
 
     @Autowired
@@ -62,7 +62,7 @@ public class WebController {
         model.addAttribute("listPhimChieuRap", listPhimChieuRap);
         model.addAttribute("listPhimHot", listPhimHot);
         model.addAttribute("listBlogHot", listBlogHot);
-        return "index";
+        return "/web/index";
     }
 
     @GetMapping("/phim-bo")
@@ -72,7 +72,7 @@ public class WebController {
         Page<Movie> pageData = movieService.findByType(MovieType.PHIM_BO, true, page, pageSize);
         model.addAttribute("pageData", pageData);
         model.addAttribute("currentPage", page);
-        return "phim-bo";
+        return "/web/movie/phim-bo";
     }
 
     @GetMapping("/phim-le")
@@ -82,7 +82,7 @@ public class WebController {
         Page<Movie> pageData = movieService.findByType(MovieType.PHIM_LE, true, page, pageSize);
         model.addAttribute("pageData", pageData);
         model.addAttribute("currentPage", page);
-        return "phim-le";
+        return "/web/movie/phim-le";
     }
 
     @GetMapping("/phim-chieu-rap")
@@ -92,7 +92,7 @@ public class WebController {
         Page<Movie> pageData = movieService.findByType(MovieType.PHIM_CHIEU_RAP, true, page, pageSize);
         model.addAttribute("pageData", pageData);
         model.addAttribute("currentPage", page);
-        return "phim-chieu-rap";
+        return "/web/movie/phim-chieu-rap";
     }
 
 
@@ -106,28 +106,48 @@ public class WebController {
     @GetMapping("/phim/{id}/{slug}")
     public String thongTinPhim(Model model, @PathVariable int id, @PathVariable String slug) {
         Movie movie = movieService.findByIdAndSlug(id, slug);
-        List<Episode> episode = episodeService.findById(id);
+        List<Episode> episodes = episodeService.findById(id);
         List<Reviews> reviews = reviewService.findByMovieIdOrderByDateDesc(id);
         List<Movie> phimDeXuat = movieService.findByTypeAndStatusOrderByRatingAsc(movie.getType()).stream().limit(8).toList();
         model.addAttribute("phimDeXuat", phimDeXuat);
         model.addAttribute("movie", movie);
-        model.addAttribute("episode", episode);
+        model.addAttribute("episodes", episodes);
         model.addAttribute("reviews", reviews);
-        return "thong-tin-phim";
+        return "/web/movie/thong-tin-phim";
+    }
+
+
+    @GetMapping("/xem-phim/{id}/{slug}")
+    public String xemPhimPage(Model model,
+                              @PathVariable int id,
+                              @PathVariable String slug,
+                              @RequestParam String tap) {
+        Movie movie = movieService.findByIdAndSlug(id, slug);
+        List<Episode> episodes = episodeService.findById(id);
+        List<Reviews> reviews = reviewService.findByMovieIdOrderByDateDesc(id);
+        List<Movie> phimDeXuat = movieService.findByTypeAndStatusOrderByRatingAsc(movie.getType()).stream().limit(8).toList();
+        Episode currentEpisode = episodeService.getEpisode(id, tap);
+        model.addAttribute("phimDeXuat", phimDeXuat);
+        model.addAttribute("movie", movie);
+        model.addAttribute("episodes", episodes);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("currentEpisode", currentEpisode);
+        model.addAttribute("episode", currentEpisode);
+        return "/web/movie/xem-phim";
     }
 
 
 
     @GetMapping("/login")
     public String login() {
-        return "login";
+        return "/web/auth/login";
     }
 
 
 
     @GetMapping("/register")
     public String register() {
-        return "register";
+        return "/web/auth/register";
     }
 
     @GetMapping("/user-info/{id}")
@@ -140,7 +160,7 @@ public class WebController {
         }
         Optional<User> user = userService.findUserById(userId);
         model.addAttribute("user", user);
-        return "thong-tin-nguoi-dung";
+        return "/web/user/thong-tin-nguoi-dung";
     }
 
     @GetMapping("/user-info/{id}/favorites")
@@ -153,7 +173,7 @@ public class WebController {
         }
         List<Favorite> favorites = favoriteService.findByUserIdOrderByCreateAtDesc(userId);
         model.addAttribute("favorites", favorites);
-        return "danh-sach-yeu-thich";
+        return "/web/user/danh-sach-yeu-thich";
     }
 
     @GetMapping("/user-info/{id}/password")
@@ -166,7 +186,7 @@ public class WebController {
         }
         Optional<User> user = userService.findUserById(userId);
         model.addAttribute("user", user);
-        return "update-password";
+        return "/web/user/update-password";
     }
 }
 

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #content}, ~{:: #js})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>USER INFO</title>
+    <th:block id="css">
+    </th:block>
+</head>
+<body>
+<th:block id="content">
+    <div class="container " style="width: 750px">
+        <div class="border border-secondary border-1 border-opacity-25 rounded-3 my-3">
+            <h3 class="p-4">
+                Cập nhật thông tin
+            </h3>
+            <div class="d-flex flex-column mb-3 align-items-center ">
+                <div>
+                    <img style="height: 200px; width: 150px; object-fit: cover" th:src="${#authentication.principal.user.avatar}" alt="A">
+                </div>
+                <span class="m-4 border-bottom" style="width: 95%"></span>
+                <form class="form-user-info">
+                    <div class="form-group mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" th:value="${#authentication.principal.user.username}"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label" >Email</label>
+                        <input type="email" class="form-control" id="email" name="email" disabled th:value="${#authentication.principal.user.email}"/>
+                    </div>
+                    <div class="form-group mb-3">
+                        <button type="submit" class="btn btn-primary" id="btn-update-user">Cập Nhật</button>
+                        <a th:href="@{/user-info/{id}/password(id=${#authentication.principal.user.id})}">
+                            <button type="button" class="btn btn-primary">Đổi mật khẩu</button>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</th:block>
+
+<th:block id="js">
+    <!-- JS -->
+    <script src="/web-asset/js/userInfo.js"></script>
+</th:block>
+</body>
+</html>

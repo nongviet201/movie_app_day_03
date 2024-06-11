@@ -12,6 +12,8 @@ import com.example.demo.repository.UserReponsitory;
 import com.example.demo.servies.ReviewService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -34,12 +36,11 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewReponsitory.findByMovieIdOrderByCreateAtDesc(movieId);
     }
 
-
-    //Validate thong tin: content, rating, ... su dung thu vien Validation
     @Override
     public Reviews createReview(UpsertReviewRequest request) {
-        //TODO: fix userId. ve sau userId chinh la user dang login
-        User user = (User) session.getAttribute("currentUser");
+        //TODO: Sử dụng security context holder để lấy tt người dùng ra
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication;
 
         //kiem tra movie co ton tai khong
         Movie movie = movieRepository.findById(request.getMovieId())
@@ -65,8 +66,9 @@ public class ReviewServiceImpl implements ReviewService {
         Reviews reviews = reviewReponsitory.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
-        //TODO: fix userId. ve sau userId chinh la user dang login
-        User user = (User) session.getAttribute("currentUser");
+        //TODO: Sử dụng security context holder để lấy tt người dùng ra
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication;
 
         //kiem tra movie co ton tai khong
         Movie movie = movieRepository.findById(request.getMovieId())
@@ -96,7 +98,9 @@ public class ReviewServiceImpl implements ReviewService {
         Reviews reviews = reviewReponsitory.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
-        User user = (User) session.getAttribute("currentUser");
+        //TODO: Sử dụng security context holder để lấy tt người dùng ra
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication;
 
         //Kiem tra review co thuoc user hay khong
         if (!reviews.getUser().getId().equals(user.getId())) {
@@ -111,8 +115,9 @@ public class ReviewServiceImpl implements ReviewService {
         Reviews review = reviewReponsitory.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Review not found"));
 
-        //TODO: fix userId. ve sau userId chinh la user dang login
-        User user = (User) session.getAttribute("currentUser");
+        //TODO: Sử dụng security context holder để lấy tt người dùng ra
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication;
 
         //Kiem tra review co thuoc user hay khong
         if (!review.getUser().getId().equals(user.getId())) {

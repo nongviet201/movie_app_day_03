@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface CommentService {
     List<Comment> findByBlogId(Integer blogId);
+
+    List<Comment> getCommentsByBlogId(Integer id);
+
+    void deleteCommentsByBlogId(Integer id);
 }

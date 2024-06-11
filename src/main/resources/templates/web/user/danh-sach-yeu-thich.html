@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #content}, ~{:: #js})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>USER INFO FAVORITES</title>
+
+    <th:block id="css">
+    </th:block>
+</head>
+<body>
+<th:block id="content">
+    <section class="py-4">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3>Danh Sách Phim Yêu Thích</h3>
+            </div>
+            <div class="row" id="div-favorites">
+                <div th:if="${favorites == null}">Nhấn Follow phim để thêm vào danh sách yêu thích</div>
+                <div class="col-3 mt-2" th:if="${favorites != null}" th:each="favorite : ${favorites}">
+                    <div class="movie-item">
+                        <div class="movie-poster rounded overflow-hidden position-relative">
+                            <a th:href="@{/phim/{id}/{slug} (id = ${favorite.getMovie().getId()}, slug = ${favorite.getMovie().getSlug()})}">
+                                <img class="w-100 h-100" th:src="${favorite.movie.getPoster()}" alt="Bo-doi-bao-thu">
+                            </a>
+                            <button class="btn btn-danger position-absolute m-1 delete-favorite-button" style="top: 0; right: 0;"
+                                    th:attr="data-id=${favorite.getId()}"
+                            >X</button>
+                        </div>
+                        <a th:href="@{/phim/{id}/{slug} (id = ${favorite.getMovie().getId()}, slug = ${favorite.getMovie().getSlug()})}">
+                            <p class="mt-2" th:text="${favorite.movie.getName()}">Bộ đôi báo thủ </p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+<th:block id="js">
+    <!-- JS -->
+    <script src="/web-asset/js/favoriteList.js"></script>
+</th:block>
+</body>
+</html>

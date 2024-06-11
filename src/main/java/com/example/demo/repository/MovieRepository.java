@@ -26,9 +26,6 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     List<Movie> findByStatusOrderByRatingDesc(boolean status);
 
-
-
-
     Movie findByIdAndSlug(int id, String slug);
 
     // kiem tra ton tai

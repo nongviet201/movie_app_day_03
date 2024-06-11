@@ -10,6 +10,11 @@ import com.example.demo.servies.AuthService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,18 +31,33 @@ public class AuthServiceImpl implements AuthService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     HttpSession session;
+    @Autowired
+    AuthenticationManager authenticationManager;
+
 
     @Override
     public void login(LoginRequest request) {
-        User users = userReponsitory.findByEmail(request.getEmail())
-                .orElseThrow(() -> new BadRequestException("Email incorrect"));
+        UsernamePasswordAuthenticationToken token =
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
 
-        // kiểm tra password
-        if (!bCryptPasswordEncoder.matches(request.getPassword(), users.getPassword())) {
-            throw new BadRequestException("password incorrect");
+        try {
+            Authentication authentication = authenticationManager.authenticate(token);
+            session.setAttribute("MY_SESSION", authentication.getName());
+        } catch (DisabledException e){
+            throw  new BadRequestException("Tài khoản chưa được kích hoạt");
+        } catch (AuthenticationException e){
+            throw new BadRequestException("Tài khoản hoặc mật khẩu chưa chính xác");
         }
-        // lưu thông tin user vào session dể sử dụng ở các request tiếp theo
-        session.setAttribute("currentUser", users);
+
+//        User users = userReponsitory.findByEmail(request.getEmail())
+//                .orElseThrow(() -> new BadRequestException("Email incorrect"));
+//
+//        // kiểm tra password
+//        if (!bCryptPasswordEncoder.matches(request.getPassword(), users.getPassword())) {
+//            throw new BadRequestException("password incorrect");
+//        }
+//        // lưu thông tin user vào session dể sử dụng ở các request tiếp theo
+//        session.setAttribute("currentUser", users);
     }
 
     @Override
